@@ -1,6 +1,7 @@
 import com.beancurd.rxjava.Dispose;
 import com.beancurd.rxjava.Observable;
 import com.beancurd.rxjava.Observer;
+import com.beancurd.rxjava.executors.Dispatchers;
 import com.beancurd.rxjava.observable.ObservableMap;
 import com.beancurd.rxjava.observer.SimpleObserver;
 
@@ -62,35 +63,39 @@ public class Main {
 
 
         // 6. 问题六 对于向Mapper这样的Observer，大多是透传，可以通过委托优化一下啊吗？ Kotlin的语言，真是太简洁了
+        // 7. 接下来是做一个线程切换、流合并、限制频率等
         Integer [] a = new Integer[]{1, 2, 3, 4};
         Observable.just(a)
+//                .observeOn(Dispatchers.IO)
                 .map(new ObservableMap.Mapper<Integer, String>() {
                     @Override
                     public String map(Integer rawData) {
-                        return rawData+",beancurdV";
+                        System.out.println("on map : " + Thread.currentThread().getName());
+                        return rawData+",beancurdV ";
                     }
                 })
+                .observeOn(Dispatchers.IO)
                 .observe(new SimpleObserver<String>() {
                     private Dispose mDispose;
                     @Override
                     public void onSubscribe(Dispose dispose) {
                         mDispose = dispose;
-                        System.out.println("onSubscribe .... ");
+                        System.out.println("onSubscribe ....  " + Thread.currentThread().getName());
                     }
 
                     @Override
                     public void onNext(String data) {
-                        System.out.println("onNext .... " + data);
+                        System.out.println("onNext .... " + data   + Thread.currentThread().getName());
                     }
 
                     @Override
                     public void onError(Exception e) {
-                        System.out.println("onError .... ");
+                        System.out.println("onError ....  " + Thread.currentThread().getName());
                     }
 
                     @Override
                     public void onComplete() {
-                        System.out.println("onComplete .... ");
+                        System.out.println("onComplete ....  " + Thread.currentThread().getName());
                     }
                 });
     }

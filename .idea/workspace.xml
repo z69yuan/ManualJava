@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="72c1d3ed-8b71-4fd7-9a71-a5c4fa738bbb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/com/beancurd/rxjava/observable/ObservableMap.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/beancurd/rxjava/executors/Dispatchers.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/beancurd/rxjava/observable/ObservableObserveOn.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/beancurd/rxjava/Observable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/beancurd/rxjava/Observable.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
