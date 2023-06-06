@@ -1,6 +1,7 @@
 import com.beancurd.rxjava.Dispose;
 import com.beancurd.rxjava.Observable;
 import com.beancurd.rxjava.Observer;
+import com.beancurd.rxjava.observable.ObservableMap;
 import com.beancurd.rxjava.observer.SimpleObserver;
 
 public class Main {
@@ -28,9 +29,48 @@ public class Main {
         // 3. 问题三 有没有哪个Observable 不必实现 subScribeActual方法， 这决定了是否使用abstract 关键字
         // 4. 问题四 Dispose 一定存在并发问题
         // 5. 问题五 Observer 失败、取消属于 onComplete 范围吗
+        /*
+            Integer [] a = new Integer[]{1, 2, 3, 4};
+            Observable.just(a)
+                    .observe(new SimpleObserver<Integer>() {
+                        private Dispose mDispose;
+                        @Override
+                        public void onSubscribe(Dispose dispose) {
+                            mDispose = dispose;
+                            System.out.println("onSubscribe .... ");
+                        }
+
+                        @Override
+                        public void onNext(Integer data) {
+                            if (data == 3) {
+                                mDispose.doCancel();
+                            }
+                            System.out.println("onNext .... " + data);
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            System.out.println("onError .... ");
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            System.out.println("onComplete .... ");
+                        }
+                    });
+        */
+
+
+        // 6. 问题六 对于向Mapper这样的Observer，大多是透传，可以通过委托优化一下啊吗？ Kotlin的语言，真是太简洁了
         Integer [] a = new Integer[]{1, 2, 3, 4};
         Observable.just(a)
-                .observe(new SimpleObserver<Integer>() {
+                .map(new ObservableMap.Mapper<Integer, String>() {
+                    @Override
+                    public String map(Integer rawData) {
+                        return rawData+",beancurdV";
+                    }
+                })
+                .observe(new SimpleObserver<String>() {
                     private Dispose mDispose;
                     @Override
                     public void onSubscribe(Dispose dispose) {
@@ -39,10 +79,7 @@ public class Main {
                     }
 
                     @Override
-                    public void onNext(Integer data) {
-                        if (data == 3) {
-                            mDispose.doCancel();
-                        }
+                    public void onNext(String data) {
                         System.out.println("onNext .... " + data);
                     }
 
